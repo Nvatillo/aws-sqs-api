@@ -1,4 +1,4 @@
-﻿namespace aws_sqs_api
+﻿namespace aws_sqs_api.Dto
 {
     public class UserDto
     {
