@@ -1,5 +1,6 @@
 ﻿using aws_sqs_api.Dto;
 using aws_sqs_api.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -16,12 +17,20 @@ namespace aws_sqs_api.Controllers
         public static User user = new();
 
         public IConfiguration _configuration { get; }
+        public IUserServices _userServices { get; }
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration , IUserServices userServices)
         {
             _configuration = configuration;
+            _userServices = userServices;
         }
 
+        [HttpGet, Authorize]
+        public ActionResult<string> GetMe()
+        {
+            var userName = _userServices.GetMyName();
+            return Ok(userName);
+        }
 
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
